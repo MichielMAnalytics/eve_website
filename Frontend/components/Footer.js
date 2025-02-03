@@ -12,30 +12,8 @@ const MarketInfo = React.memo(({ styles, dynamicStyles }) => {
       {isSmallScreen ? (
         // Mobile layout
         <>
-          <View style={styles.marketRow}>
-            <View style={styles.marketItem}>
-              <Text style={[styles.marketLabel, isMobileScreen && styles.marketLabelMobile]}>CURRENT PRICE:</Text>
-              <Text style={[styles.marketValue, isMobileScreen && styles.marketValueMobile]}>$0.03472</Text>
-              <Text style={[styles.marketChange, isMobileScreen && styles.marketChangeMobile]}>-24.69%</Text>
-            </View>
-          </View>
-          <View style={styles.marketRow}>
-            <View style={styles.marketItem}>
-              <Text style={[styles.marketLabel, isMobileScreen && styles.marketLabelMobile]}>MARKET CAP:</Text>
-              <Text style={[styles.marketValue, isMobileScreen && styles.marketValueMobile]}>$34,484,366.00</Text>
-            </View>
-          </View>
-          <View style={styles.marketRow}>
-            <View style={styles.marketItem}>
-              <Text style={[styles.marketLabel, isMobileScreen && styles.marketLabelMobile]}>HOLDERS:</Text>
-              <Text style={[styles.marketValue, isMobileScreen && styles.marketValueMobile]}>87,443</Text>
-            </View>
-          </View>
-          <View style={styles.marketRow}>
-            <View style={styles.marketItem}>
-              <Text style={[styles.marketLabel, isMobileScreen && styles.marketLabelMobile]}>24H VOLUME:</Text>
-              <Text style={[styles.marketValue, isMobileScreen && styles.marketValueMobile]}>$1,188,114.03</Text>
-            </View>
+          <View style={{ alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+            <Text style={[styles.marketValue, { color: '#FFFFFF' }]}>watch closely and you may find</Text>
           </View>
         </>
       ) : (
@@ -62,7 +40,7 @@ const SocialLinks = React.memo(({ styles }) => {
           borderRadius: 5,
           backgroundColor: 'rgba(244, 228, 9, 0.1)',
         }]} 
-        onPress={() => window.open('https://x.com/eve_protocol', '_blank')}
+        onPress={() => window.open('https://x.com/eveprotocolai', '_blank')}
       >
         <svg 
           width={iconSize} 
@@ -72,6 +50,47 @@ const SocialLinks = React.memo(({ styles }) => {
         >
           <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
         </svg>
+      </Pressable>
+    </View>
+  );
+});
+
+const PolicyLinks = React.memo(({ styles, responsiveStyles }) => {
+  const { width } = useWindowDimensions();
+  const isSmallScreen = width <= 768;
+
+  const handlePolicyClick = (url, isConsentManager = false) => {
+    if (isConsentManager) {
+      // Display the consent manager
+      if (window.displayPreferenceModal) {
+        window.displayPreferenceModal();
+      }
+    } else {
+      window.open(url, '_blank');
+    }
+  };
+
+  return (
+    <View style={[styles.policyLinksContainer, responsiveStyles.policyLinksContainer]}>
+      <Pressable 
+        style={styles.policyLink}
+        onPress={() => handlePolicyClick('https://app.termly.io/policy-viewer/policy.html?policyUUID=8e73b71f-0dff-46c4-a312-a7a418937749')}
+      >
+        <Text style={styles.policyLinkText}>Privacy Policy</Text>
+      </Pressable>
+      <Text style={styles.policyDivider}>|</Text>
+      <Pressable 
+        style={styles.policyLink}
+        onPress={() => handlePolicyClick('https://app.termly.io/policy-viewer/policy.html?policyUUID=2512b9fa-1f74-489a-be43-d5336e089119')}
+      >
+        <Text style={styles.policyLinkText}>Terms & Conditions</Text>
+      </Pressable>
+      <Text style={styles.policyDivider}>|</Text>
+      <Pressable 
+        style={styles.policyLink}
+        onPress={() => handlePolicyClick('https://app.termly.io/policy-viewer/policy.html?policyUUID=7fe0551c-b80a-4508-a25d-3b92faa89653')}
+      >
+        <Text style={styles.policyLinkText}>Cookie Policy</Text>
       </Pressable>
     </View>
   );
@@ -103,6 +122,12 @@ const Footer = ({ dynamicStyles }) => {
       alignSelf: isSmallScreen ? 'center' : 'flex-end',
       paddingRight: isSmallScreen ? 0 : 40,
       paddingTop: isSmallScreen ? 20 : 0,
+    },
+    policyLinksContainer: {
+      flexDirection: isSmallScreen ? 'column' : 'row',
+      gap: isSmallScreen ? 15 : 10,
+      marginTop: isSmallScreen ? 20 : 0,
+      alignItems: 'center',
     }
   };
 
@@ -120,6 +145,7 @@ const Footer = ({ dynamicStyles }) => {
             <SocialLinks styles={styles} />
           </View>
         </View>
+        <PolicyLinks styles={styles} responsiveStyles={responsiveStyles} />
       </View>
     </View>
   );
@@ -231,6 +257,36 @@ const styles = StyleSheet.create({
       backgroundColor: 'rgba(244, 228, 9, 0.2)',
       transform: 'translateY(-2px)',
     }
+  },
+  policyLinksContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    paddingTop: 20,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(244, 228, 9, 0.1)',
+  },
+  policyLink: {
+    padding: 8,
+    cursor: 'pointer',
+  },
+  policyLinkText: {
+    color: '#666',
+    fontSize: 12,
+    fontFamily: 'Orbitron_400Regular',
+    letterSpacing: 1,
+    transition: 'all 0.3s ease',
+    ':hover': {
+      color: '#F4E409',
+      textShadow: '0 0 8px rgba(244, 228, 9, 0.3)',
+    }
+  },
+  policyDivider: {
+    color: '#666',
+    opacity: 0.3,
+    fontSize: 14,
+    marginHorizontal: 10,
   },
 });
 

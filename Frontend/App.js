@@ -9,6 +9,8 @@ import {
   TextInput,
   useWindowDimensions,
   Platform,
+  Image,
+  Animated,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts, Orbitron_400Regular, Orbitron_700Bold } from '@expo-google-fonts/orbitron';
@@ -16,12 +18,13 @@ import OctahedronSvg from './components/OctahedronSvg';
 import AnimatedLines from './components/AnimatedLines';
 import DataStream from './components/DataStream';
 import TriggeredEffect from './components/TriggeredEffect';
-import Terminal from './components/TerminalBackup';
 import Documentation from './pages/Documentation';
 import Protocol from './pages/Protocol';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import FeaturesSection from './components/FeaturesSection';
+import UserStatistics from './components/UserStatistics';
+import OnboardingSteps from './components/OnboardingSteps';
 
 const debounce = (func, wait) => {
   let timeout;
@@ -37,35 +40,116 @@ const debounce = (func, wait) => {
 
 const getDynamicStyles = (width) => ({
   mainTitle: {
-    fontSize: width <= 480 ? 28 : width <= 768 ? 36 : width <= 1024 ? 48 : 64,
-    lineHeight: width <= 480 ? '32px' : width <= 768 ? '40px' : width <= 1024 ? '52px' : '68px',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    width: '100%',
+    fontSize: width <= 480 ? 40 : width <= 768 ? 48 : 64,
+    lineHeight: width <= 480 ? '50px' : width <= 768 ? '52px' : '68px',
+    width: 'auto',
+    whiteSpace: 'wrap',
   },
   heroSection: {
     padding: width <= 768 ? 20 : 40,
+    marginBottom: width <= 480 ? 2 : 20,
+  },
+  heroContent: {
+    flexDirection: width <= 1024 ? 'column' : 'row',
+    gap: width <= 768 ? 20 : width <= 1024 ? 30 : 60,
+    alignItems: 'flex-start',
+    paddingTop: width <= 768 ? 10 : width <= 1024 ? 20 : 40,
+    maxWidth: width <= 1024 ? '100%' : '1200px',
+  },
+  heroColumn: {
+    width: width <= 1024 ? '100%' : '45%',
+    alignItems: 'flex-start',
+    textAlign: 'left',
+    paddingTop: width <= 1024 ? 0 : 40,
+  },
+  descriptionText: {
+    textAlign: 'left',
+    maxWidth: width <= 1024 ? '600px' : '100%',
+    fontSize: width <= 480 ? 14 : width <= 768 ? 16 : 20,
+    lineHeight: width <= 480 ? 20 : width <= 768 ? 24 : 32,
+    marginTop: width <= 768 ? 12 : 24,
+    opacity: 0.8,
   },
   marketInfo: {
     flexDirection: width <= 768 ? 'column' : 'row',
     gap: width <= 768 ? 15 : 30,
+    alignItems: width <= 768 ? 'center' : 'flex-start',
   },
   footerContent: {
     padding: width <= 768 ? 20 : 40,
+    flexDirection: width <= 768 ? 'column' : 'row',
+    alignItems: width <= 768 ? 'center' : 'flex-start',
+    gap: width <= 768 ? 30 : 40,
   },
   systemText: {
-    fontSize: width <= 480 ? 12 : 16,
-    marginBottom: width <= 480 ? 10 : 15,
+    fontSize: width <= 480 ? 11 : width <= 768 ? 13 : 16,
+    marginBottom: width <= 480 ? 12 : width <= 768 ? 16 : 24,
+    textAlign: 'left',
+    opacity: 0.7,
   },
   versionText: {
     fontSize: width <= 480 ? 12 : 16,
     marginBottom: width <= 480 ? 20 : 40,
-  }
+    textAlign: 'left',
+  },
+  contentContainer: {
+    maxWidth: width <= 768 ? '100%' : width <= 1024 ? '856px' : '1200px',
+    margin: '0 auto',
+    padding: width <= 768 ? '0 20px' : width <= 1024 ? '0 30px' : '0 40px',
+  },
+  titleLogoWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    position: 'relative',
+    zIndex: 10,
+    marginLeft: 4,
+    display: 'inline-flex',
+  },
+  titleLogo: {
+    width: width <= 480 ? 31 : width <= 768 ? 35 : 40,
+    height: width <= 480 ? 31 : width <= 768 ? 35 : 40,
+    resizeMode: 'contain',
+    position: 'relative',
+    zIndex: 10,
+  },
+  mainTitleWrapper: {
+    marginBottom: width <= 480 ? 1 : 10,
+    flexShrink: 1,
+    width: '100%',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+  },
+  onTextContainer: {
+    display: 'inline',
+    position: 'relative',
+  },
+  mobileSecondLine: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: width <= 480 ? 0 : 4,
+  },
+  placeholderLogoWrapper: {
+    marginLeft: 8,
+    display: 'inline-flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: width <= 480 ? 40 : width <= 768 ? 44 : 48,
+    height: width <= 480 ? 40 : width <= 768 ? 44 : 48,
+    backgroundColor: 'rgba(244, 228, 9, 0.1)',
+    borderRadius: 24,
+    filter: 'blur(2px)',
+  },
+  placeholderLogo: {
+    width: width <= 480 ? 31 : width <= 768 ? 35 : 40,
+    height: width <= 480 ? 31 : width <= 768 ? 35 : 40,
+    backgroundColor: '#B0B0B0',
+    borderRadius: 20,
+    opacity: 0.3,
+  },
 });
 
 const Home = () => {
-  const { width } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
   const [isSmallScreen, setIsSmallScreen] = useState(false);
 
   let [fontsLoaded] = useFonts({
@@ -75,6 +159,36 @@ const Home = () => {
 
   // Add state for octahedron visibility
   const [showOctahedron, setShowOctahedron] = useState(true);
+
+  // Add animated values for octahedron position
+  const octahedronX = useRef(new Animated.Value(0)).current;
+  const octahedronY = useRef(new Animated.Value(0)).current;
+
+  // Function to move the octahedron to a random position
+  const moveOctahedron = useCallback(() => {
+    const randomX = Math.random() * (width - 400); // Subtract octahedron width
+    const randomY = Math.random() * (height - 400); // Subtract octahedron height
+
+    Animated.timing(octahedronX, {
+      toValue: randomX,
+      duration: 2000,
+      useNativeDriver: true,
+    }).start();
+
+    Animated.timing(octahedronY, {
+      toValue: randomY,
+      duration: 2000,
+      useNativeDriver: true,
+    }).start();
+  }, [width, height, octahedronX, octahedronY]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      moveOctahedron();
+    }, Math.random() * (5000 - 2000) + 2000); // Random interval between 2 and 5 seconds
+
+    return () => clearInterval(interval);
+  }, [moveOctahedron]);
 
   // Memoize the resize handler
   const handleResize = useCallback(() => {
@@ -110,6 +224,17 @@ const Home = () => {
 
   const navigate = useNavigate();
 
+  // Add ref for onboarding section
+  const onboardingRef = useRef(null);
+
+  // Add scroll handler
+  const scrollToOnboarding = () => {
+    onboardingRef.current?.scrollIntoView({ 
+      behavior: 'smooth',
+      block: 'start'
+    });
+  };
+
   if (!fontsLoaded) {
     return null;
   }
@@ -135,9 +260,19 @@ const Home = () => {
 
       {/* Simplified Octahedron layer */}
       {showOctahedron && (
-        <View style={styles.octahedron}>
-          <OctahedronSvg width={700} height={700} />
-        </View>
+        <Animated.View
+          style={[
+            styles.octahedron,
+            {
+              transform: [
+                { translateX: octahedronX },
+                { translateY: octahedronY },
+              ],
+            },
+          ]}
+        >
+          <OctahedronSvg width={400} height={400} />
+        </Animated.View>
       )}
 
       {/* Content layer */}
@@ -145,23 +280,67 @@ const Home = () => {
         <Navbar />
 
         <View style={[styles.heroSection, dynamicStyles.heroSection]}>
-          <View style={styles.heroContent}>
-            <Text style={[styles.systemText, dynamicStyles.systemText]}>
-              SYSTEM://INITIALIZED
-            </Text>
-            <Text style={[styles.mainTitle, dynamicStyles.mainTitle]}>
-              AUTONOMOUS
-            </Text>
-            <Text style={[styles.mainTitle, dynamicStyles.mainTitle]}>
-              INTELLIGENCE
-            </Text>
-            <Text style={[styles.versionText, dynamicStyles.versionText]}>
-              V.1.0.0 | Powered by the E.V.E. Protocol
-            </Text>
-            <View style={styles.terminalContainer}>
-              <Terminal />
+          <View style={dynamicStyles.contentContainer}>
+            <View style={[styles.heroContent, dynamicStyles.heroContent]}>
+              {/* Left Column */}
+              <View style={[styles.heroColumn, styles.leftColumn, dynamicStyles.heroColumn]}>
+                <Text style={[styles.systemText, dynamicStyles.systemText]}>
+                  // Trusted by the best in Web3.0
+                </Text>
+                <View style={[styles.mainTitleWrapper, dynamicStyles.mainTitleWrapper]}>
+                  <Text style={[styles.mainTitle, dynamicStyles.mainTitle]}>
+                    Spend less time on{' '}
+                    <View style={[styles.titleLogoWrapper, dynamicStyles.titleLogoWrapper]}>
+                      <Image 
+                        source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Telegram_2019_Logo.svg/512px-Telegram_2019_Logo.svg.png' }}
+                        style={dynamicStyles.titleLogo}
+                      />
+                      <View style={dynamicStyles.placeholderLogoWrapper}>
+                        <View style={dynamicStyles.placeholderLogo} />
+                      </View>
+                      <View style={dynamicStyles.placeholderLogoWrapper}>
+                        <View style={dynamicStyles.placeholderLogo} />
+                      </View>
+                    </View>
+                  </Text>
+                </View>
+                <Text style={[styles.descriptionText, dynamicStyles.descriptionText]}>
+                    Stop reacting. Start creating. Let your digital twin filter through the noise.
+                </Text>
+                
+                {/* Update the CTA button to use the scroll handler */}
+                <Pressable 
+                  style={styles.ctaButton}
+                  onPress={scrollToOnboarding}
+                >
+                  <LinearGradient
+                    colors={['#F4E409', '#E5D104']}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 0 }}
+                    style={styles.ctaGradient}
+                  >
+                    <Text style={styles.ctaText}>Get Started</Text>
+                  </LinearGradient>
+                </Pressable>
+
+                {/* <View style={styles.actionContainer}>
+                  <Text style={[styles.versionText, dynamicStyles.versionText]}>
+                    V.1.0.0 | Powered by the E.V.E. Protocol
+                  </Text>
+                </View> */}
+              </View>
+
+              {/* Right Column */}
+              <View style={[styles.heroColumn, styles.rightColumn, dynamicStyles.heroColumn]}>
+                <UserStatistics />
+              </View>
             </View>
           </View>
+        </View>
+
+        {/* Add ref to OnboardingSteps */}
+        <View ref={onboardingRef}>
+          <OnboardingSteps />
         </View>
 
         <FeaturesSection />
@@ -183,8 +362,8 @@ const App = () => {
       <View style={styles.container}>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/documentation" element={<Documentation />} />
-          <Route path="/protocol" element={<Protocol />} />
+          {/* <Route path="/documentation" element={<Documentation />} />
+          <Route path="/protocol" element={<Protocol />} /> */}
         </Routes>
       </View>
     </Router>
@@ -194,11 +373,12 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
-    minHeight: Platform.OS === 'web' ? '100vh' : '100%',
-    width: '100%',
-    overflow: 'hidden',
+    backgroundColor: '#000000',
     position: 'relative',
+    overflow: 'hidden',
+    height: '100%',
+    paddingBottom: 0,
+    marginBottom: 0,
   },
   background: {
     position: 'absolute',
@@ -211,7 +391,7 @@ const styles = StyleSheet.create({
     zIndex: 0,
   },
   animatedLinesWrapper: {
-    position: Platform.OS === 'web' ? 'fixed' : 'absolute',
+    position: 'fixed',
     top: 0,
     left: 0,
     right: 0,
@@ -222,7 +402,7 @@ const styles = StyleSheet.create({
     pointerEvents: 'none',
   },
   decorativeLayer: {
-    position: Platform.OS === 'web' ? 'fixed' : 'absolute',
+    position: 'fixed',
     left: 0,
     right: 0,
     top: 0,
@@ -231,48 +411,37 @@ const styles = StyleSheet.create({
     pointerEvents: 'none',
   },
   octahedron: {
-    position: Platform.OS === 'web' ? 'fixed' : 'absolute',
-    top: '35%',
-    right: '5%',
-    transform: Platform.OS === 'web' 
-      ? [{ translateY: -250 }, { rotate: '15deg' }]
-      : [{ translateY: -125 }, { rotate: '15deg' }],
+    position: 'fixed',
+    top: '15vh',
+    left: '90vh',
+    transform: [{ translateY: -200 }, { rotate: '-15deg' }],
     zIndex: 3,
     pointerEvents: 'none',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    opacity: 0.7,
   },
   content: {
     flex: 1,
     width: '100%',
-    minHeight: Platform.OS === 'web' ? '100vh' : '100%',
     position: 'relative',
-    zIndex: 4,
-    display: Platform.OS === 'web' ? 'flex' : undefined,
-    flexDirection: 'column',
+    zIndex: 3,
+    paddingBottom: 0,
+    marginBottom: 0,
   },
   heroSection: {
     flex: 1,
-    minHeight: Platform.OS === 'web' ? 'calc(100vh - 80px)' : undefined,
-    paddingTop: Platform.select({
-      web: 60,
-      default: 30,
-    }),
-    paddingBottom: Platform.select({
-      web: 60,
-      default: 30,
-    }),
-    paddingHorizontal: Platform.select({
-      web: 40,
-      default: 20,
-    }),
+    minHeight: '30%',
+    maxHeight: '50%',
     position: 'relative',
     zIndex: 1,
     width: '100%',
     maxWidth: '100%',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
+    paddingTop: 10,
+    marginBottom: 0,
   },
   heroContent: {
     maxWidth: 1200,
@@ -282,15 +451,61 @@ const styles = StyleSheet.create({
     position: 'relative',
     zIndex: 20,
     flex: 1,
-    flexDirection: 'column',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 20,
+    paddingTop: 10,
+  },
+  heroColumn: {
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    minWidth: 0,
+  },
+  leftColumn: {
+    width: '42%',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    paddingLeft: Platform.select({
+      web: width => width <= 1024 ? 10 : 0,
+      default: 10
+    }),
+  },
+  rightColumn: {
+    width: '58%',
     justifyContent: 'center',
+    alignItems: 'flex-end',
+    paddingTop: 0,
+    paddingRight: Platform.select({
+      web: width => width <= 1024 ? 20 : 0,
+      default: 20
+    }),
+  },
+  titleContainer: {
+    maxWidth: 600,
+    flexShrink: 1,
+    width: '100%',
+    alignItems: 'flex-start',
+  },
+  descriptionText: {
+    color: '#E8E8E8',
+    fontSize: 18,
+    fontFamily: 'Orbitron_400Regular',
+    letterSpacing: 1,
+    lineHeight: 28,
+    marginBottom: '15%',
+    opacity: 0.8,
+    maxWidth: 480,
+  },
+  actionContainer: {
+    marginTop: 'auto',
+    alignItems: 'flex-start',
   },
   systemText: {
     color: '#E8E8E8',
     fontSize: 16,
     fontFamily: 'Orbitron_400Regular',
     letterSpacing: 4,
-    marginBottom: 15,
+    marginBottom: 24,
     textTransform: 'uppercase',
     opacity: 0.8,
   },
@@ -298,19 +513,28 @@ const styles = StyleSheet.create({
     color: '#E5D104',
     fontFamily: 'Orbitron_700Bold',
     letterSpacing: 2,
-    textTransform: 'uppercase',
+    textTransform: 'Normal',
     textShadow: '0 0 15px rgba(229, 209, 4, 0.3), 0 0 45px rgba(229, 209, 4, 0.1)',
-    marginBottom: 15,
+    marginBottom: 24,
     cursor: 'pointer',
-    whiteSpace: 'nowrap',
     opacity: 0.95,
+    fontSize: Platform.select({
+      web: width => width <= 1024 ? 56 : 72,
+      default: 56
+    }),
+    lineHeight: Platform.select({
+      web: width => width <= 1024 ? 64 : 80,
+      default: 64
+    }),
+    flexWrap: 'wrap',
+    flexShrink: 1,
   },
   versionText: {
     color: '#E8E8E8',
     fontSize: 16,
     fontFamily: 'Orbitron_400Regular',
     letterSpacing: 4,
-    marginBottom: 40,
+    marginBottom: 0,
     opacity: 0.8,
   },
   footer: {
@@ -437,13 +661,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 20,
   },
-  terminalContainer: {
-    position: 'relative',
-    zIndex: 3,
-    width: '100%',
-    display: 'flex',
-    marginBottom: 40,
-  },
   gridOverlay: Platform.select({
     web: {
       position: 'absolute',
@@ -466,6 +683,39 @@ const styles = StyleSheet.create({
       backgroundColor: 'rgba(244, 228, 9, 0.05)',
     },
   }),
+  ctaButton: {
+    marginBottom: 40,
+    overflow: 'hidden',
+    borderRadius: 8,
+    width: 200,
+    height: 50,
+    shadowColor: '#F4E409',
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 10,
+    elevation: 5,
+  },
+  ctaGradient: {
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 15,
+  },
+  ctaText: {
+    color: '#000000',
+    fontSize: 16,
+    fontFamily: 'Orbitron_700Bold',
+    textTransform: 'uppercase',
+    letterSpacing: 2,
+  },
+  onTextContainer: {
+    display: 'inline',
+    position: 'relative',
+  },
 });
 
 export default App; 

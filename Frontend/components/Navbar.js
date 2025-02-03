@@ -7,6 +7,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 const Navbar = () => {
   const { width } = useWindowDimensions();
   const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   let [fontsLoaded] = useFonts({
     Orbitron_400Regular,
@@ -67,6 +68,67 @@ const Navbar = () => {
     </View>
   );
 
+  const BurgerMenu = () => (
+    <Pressable 
+      style={styles.burgerMenu} 
+      onPress={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+    >
+      <View style={[styles.burgerLine, isMobileMenuOpen && styles.burgerLineOpen]} />
+      <View style={[styles.burgerLine, isMobileMenuOpen && styles.burgerLineOpen]} />
+      <View style={[styles.burgerLine, isMobileMenuOpen && styles.burgerLineOpen]} />
+    </Pressable>
+  );
+
+  const MobileMenu = () => (
+    <View 
+      style={[
+        styles.mobileMenu,
+        { 
+          display: isMobileMenuOpen ? 'flex' : 'none',
+          opacity: isMobileMenuOpen ? 1 : 0,
+        }
+      ]}
+      pointerEvents={isMobileMenuOpen ? 'auto' : 'none'}
+    >
+      <LinearGradient
+        colors={['rgba(0, 0, 0, 0.98)', 'rgba(0, 0, 0, 0.95)']}
+        style={styles.mobileMenuBg}
+      />
+      <View style={styles.mobileMenuContent}>
+        <View style={styles.mobileMenuItem}>
+          <View style={[styles.protocolButton, styles.disabledButton, styles.mobileButton]}>
+            <View style={styles.protocolButtonGlow} />
+            <Text style={[styles.docsButtonText, dynamicStyles.docsButtonText, styles.disabledText]}>
+              <Text style={styles.docsPrefix}>{'//'}</Text> E.V.E.
+            </Text>
+            <View style={styles.protocolButtonBorder} />
+            <ComingSoonTag />
+          </View>
+        </View>
+
+        <View style={styles.mobileMenuItem}>
+          <View style={[styles.docsButton, styles.disabledButton, styles.mobileButton]}>
+            <View style={styles.docsButtonGlow} />
+            <Text style={[styles.docsButtonText, dynamicStyles.docsButtonText, styles.disabledText]}>
+              <Text style={styles.docsPrefix}>{'//'}</Text> DOCS
+            </Text>
+            <View style={styles.docsButtonBorder} />
+            <ComingSoonTag />
+          </View>
+        </View>
+
+        <View style={styles.mobileMenuItem}>
+          <View style={[styles.connectButton, styles.disabledButton, styles.mobileButton]}>
+            <Text style={[styles.connectButtonText, dynamicStyles.connectButtonText, styles.disabledText]}>
+              CONNECT
+            </Text>
+            <ComingSoonTag />
+          </View>
+        </View>
+      </View>
+    </View>
+  );
+
   return (
     <View style={[styles.navbar, dynamicStyles.navbar]}>
       <Link to="/" style={{ textDecoration: 'none' }}>
@@ -79,38 +141,46 @@ const Navbar = () => {
           <View style={styles.logoUnderline} />
         </View>
       </Link>
-      <View style={[styles.navRight, dynamicStyles.navRight]}>
-        <View style={styles.buttonWrapper}>
-          <View style={[styles.protocolButton, styles.disabledButton]}>
-            <View style={styles.protocolButtonGlow} />
-            <Text style={[styles.docsButtonText, dynamicStyles.docsButtonText, styles.disabledText]}>
-              <Text style={styles.docsPrefix}>{'//'}</Text> E.V.E.
-            </Text>
-            <View style={styles.protocolButtonBorder} />
+      
+      {isSmallScreen ? (
+        <>
+          <BurgerMenu />
+          <MobileMenu />
+        </>
+      ) : (
+        <View style={[styles.navRight, dynamicStyles.navRight]}>
+          <View style={styles.buttonWrapper}>
+            <View style={[styles.protocolButton, styles.disabledButton]}>
+              <View style={styles.protocolButtonGlow} />
+              <Text style={[styles.docsButtonText, dynamicStyles.docsButtonText, styles.disabledText]}>
+                <Text style={styles.docsPrefix}>{'//'}</Text> E.V.E.
+              </Text>
+              <View style={styles.protocolButtonBorder} />
+            </View>
+            <ComingSoonTag />
           </View>
-          <ComingSoonTag />
-        </View>
 
-        <View style={styles.buttonWrapper}>
-          <View style={[styles.docsButton, dynamicStyles.docsButton, styles.disabledButton]}>
-            <View style={styles.docsButtonGlow} />
-            <Text style={[styles.docsButtonText, dynamicStyles.docsButtonText, styles.disabledText]}>
-              <Text style={styles.docsPrefix}>{'//'}</Text> DOCS
-            </Text>
-            <View style={styles.docsButtonBorder} />
+          <View style={styles.buttonWrapper}>
+            <View style={[styles.docsButton, dynamicStyles.docsButton, styles.disabledButton]}>
+              <View style={styles.docsButtonGlow} />
+              <Text style={[styles.docsButtonText, dynamicStyles.docsButtonText, styles.disabledText]}>
+                <Text style={styles.docsPrefix}>{'//'}</Text> DOCS
+              </Text>
+              <View style={styles.docsButtonBorder} />
+            </View>
+            <ComingSoonTag />
           </View>
-          <ComingSoonTag />
-        </View>
 
-        <View style={styles.buttonWrapper}>
-          <View style={[styles.connectButton, dynamicStyles.connectButton, styles.disabledButton]}>
-            <Text style={[styles.connectButtonText, dynamicStyles.connectButtonText, styles.disabledText]}>
-              CONNECT
-            </Text>
+          <View style={styles.buttonWrapper}>
+            <View style={[styles.connectButton, dynamicStyles.connectButton, styles.disabledButton]}>
+              <Text style={[styles.connectButtonText, dynamicStyles.connectButtonText, styles.disabledText]}>
+                CONNECT
+              </Text>
+            </View>
+            <ComingSoonTag />
           </View>
-          <ComingSoonTag />
         </View>
-      </View>
+      )}
     </View>
   );
 };
@@ -122,6 +192,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(244, 228, 9, 0.1)',
+    position: 'relative',
+    zIndex: 1000,
   },
   logoContainer: {
     position: 'relative',
@@ -299,6 +371,72 @@ const styles = StyleSheet.create({
     fontFamily: 'Orbitron_400Regular',
     letterSpacing: 0.5,
     textShadow: '0 0 8px rgba(244, 228, 9, 0.5)',
+  },
+  burgerMenu: {
+    width: 30,
+    height: 24,
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    padding: 4,
+    zIndex: 1001,
+  },
+  burgerLine: {
+    width: '100%',
+    height: 2,
+    backgroundColor: '#F4E409',
+    transition: 'all 0.3s ease',
+  },
+  burgerLineOpen: {
+    backgroundColor: '#F4E409',
+    '&:first-child': {
+      transform: 'rotate(45deg) translate(5px, 5px)',
+    },
+    '&:nth-child(2)': {
+      opacity: 0,
+    },
+    '&:last-child': {
+      transform: 'rotate(-45deg) translate(5px, -5px)',
+    },
+  },
+  mobileMenu: {
+    position: 'absolute',
+    top: '100%',
+    left: 0,
+    right: 0,
+    height: '40vh',
+    backgroundColor: 'rgba(0, 0, 0, 0)',
+    zIndex: 999,
+    overflow: 'visible',
+  },
+  mobileMenuBg: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.98)',
+  },
+  mobileMenuContent: {
+    padding: 40,
+    paddingTop: 60,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 30,
+    alignItems: 'stretch',
+    position: 'relative',
+    zIndex: 1000,
+    height: '100%',
+  },
+  mobileMenuItem: {
+    width: '100%',
+  },
+  mobileButton: {
+    width: '100%',
+    marginBottom: 10,
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
