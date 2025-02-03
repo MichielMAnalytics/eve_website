@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.js": "/static/js/main.ccaf770c.js",
+    "static/js/529.08c0384d.js": "/static/js/529.08c0384d.js",
+    "static/media/Orbitron_500Medium.ttf": "/static/media/Orbitron_500Medium.9a70c40dbb1533188a39.ttf",
+    "static/media/Orbitron_600SemiBold.ttf": "/static/media/Orbitron_600SemiBold.c34599970b617b8b3d23.ttf",
+    "static/media/Orbitron_400Regular.ttf": "/static/media/Orbitron_400Regular.23a1d6c3def1d738a011.ttf",
+    "static/media/Orbitron_800ExtraBold.ttf": "/static/media/Orbitron_800ExtraBold.f5f4155aa99e5cff44bd.ttf",
+    "static/media/Orbitron_700Bold.ttf": "/static/media/Orbitron_700Bold.386734f5392fcb3f726c.ttf",
+    "static/media/Orbitron_900Black.ttf": "/static/media/Orbitron_900Black.6a97ec87e5cd3cf1d1c4.ttf",
+    "favicon.ico": "/favicon.ico",
+    "index.html": "/index.html",
+    "favicon-32.png": "/favicon-32.png",
+    "favicon-16.png": "/favicon-16.png",
+    "manifest.json": "/manifest.json",
+    "serve.json": "/serve.json",
+    "main.ccaf770c.js.map": "/static/js/main.ccaf770c.js.map",
+    "529.08c0384d.js.map": "/static/js/529.08c0384d.js.map"
+  },
+  "entrypoints": [
+    "static/js/529.08c0384d.js",
+    "static/js/main.ccaf770c.js"
+  ]
+}
