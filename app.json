@@ -1,12 +1,13 @@
 {
   "expo": {
-    "name": "Landingpage",
-    "slug": "Landingpage",
+    "name": "Eve Protocol",
+    "slug": "eve-protocol",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
+    "platforms": ["ios", "android", "web"],
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
@@ -22,7 +23,9 @@
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "bundler": "webpack",
+      "output": "docs"
     }
   }
 }
