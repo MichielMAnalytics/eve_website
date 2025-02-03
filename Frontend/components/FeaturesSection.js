@@ -4,6 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 const FeatureCard = ({ title, description, icon, index, responsiveStyles }) => {
   const animatedValue = React.useRef(new Animated.Value(0)).current;
+  const spinValue = React.useRef(new Animated.Value(0)).current;
 
   React.useEffect(() => {
     Animated.spring(animatedValue, {
@@ -14,6 +15,25 @@ const FeatureCard = ({ title, description, icon, index, responsiveStyles }) => {
       useNativeDriver: true,
     }).start();
   }, []);
+
+  const spin = () => {
+    Animated.loop(
+      Animated.timing(spinValue, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: true,
+      })
+    ).start();
+  };
+
+  const stopSpin = () => {
+    spinValue.setValue(0);
+  };
+
+  const spinAnimation = spinValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '360deg'],
+  });
 
   const animatedStyle = {
     transform: [
@@ -43,10 +63,14 @@ const FeatureCard = ({ title, description, icon, index, responsiveStyles }) => {
       />
       <View style={styles.cardBorder} />
       <View style={styles.cardContent}>
-        <View style={[styles.iconContainer, { height: responsiveStyles.iconSize.height }]}>
+        <Animated.View
+          style={[styles.iconContainer, { height: responsiveStyles.iconSize.height, transform: [{ rotate: spinAnimation }] }]}
+          onMouseEnter={spin}
+          onMouseLeave={stopSpin}
+        >
           <View style={styles.iconGlow} />
           {icon}
-        </View>
+        </Animated.View>
         <View style={[styles.textContainer, { padding: responsiveStyles.textContainer.padding }]}>
           <Text style={[styles.cardTitle, { fontSize: responsiveStyles.cardTitle.fontSize }]}>{title}</Text>
           <Text style={[styles.cardDescription, { fontSize: responsiveStyles.cardDescription.fontSize, lineHeight: responsiveStyles.cardDescription.lineHeight }]}>{description}</Text>
@@ -93,11 +117,11 @@ const FeaturesSection = () => {
   // Add responsive style calculations
   const getResponsiveStyles = () => {
     if (width <= 480) {
-      // Mobile styles
+      // Mobile styles only
       return {
         container: {
-          padding: 20,
-          marginVertical: 40,
+          padding: 10,
+          marginVertical: 30,
         },
         titleText: {
           fontSize: 24,
@@ -109,29 +133,48 @@ const FeaturesSection = () => {
           letterSpacing: 6,
         },
         card: {
-          minWidth: '100%',
-          margin: 10,
+          minWidth: '80%',
+          margin: 8,
+          minHeight: 320,
+          alignItems: 'center',
         },
         iconSize: {
-          height: 100,
+          height: 60,
         },
         cardTitle: {
-          fontSize: 22,
+          fontSize: 18,
+          textAlign: 'center',
+          marginBottom: 10,
+          height: 50,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
         },
         cardDescription: {
-          fontSize: 14,
-          lineHeight: 22,
+          fontSize: 13,
+          lineHeight: 18,
+          textAlign: 'center',
+          position: 'relative',
+          paddingHorizontal: 20,
+          paddingTop: 0,
+          marginTop: 10,
+          top: 'auto',
+          left: 'auto',
+          right: 'auto',
         },
         textContainer: {
-          padding: 20,
+          padding: 16,
+          alignItems: 'center',
+          justifyContent: 'flex-start',
+          paddingTop: 100,
         }
       };
     } else if (width <= 768) {
       // Tablet styles
       return {
         container: {
-          padding: 30,
-          marginVertical: 60,
+          padding: 20,
+          marginVertical: 40,
         },
         titleText: {
           fontSize: 28,
@@ -143,29 +186,31 @@ const FeaturesSection = () => {
           letterSpacing: 7,
         },
         card: {
-          minWidth: '100%',
-          margin: 15,
+          minWidth: '260px',
+          maxWidth: '300px',
+          margin: 10,
+          minHeight: 400,
         },
         iconSize: {
-          height: 120,
+          height: 80,
         },
         cardTitle: {
-          fontSize: 24,
+          fontSize: 22,
         },
         cardDescription: {
           fontSize: 14,
-          lineHeight: 24,
+          lineHeight: 22,
         },
         textContainer: {
-          padding: 25,
+          padding: 16,
         }
       };
     }
     // Desktop styles (default)
     return {
       container: {
-        padding: 40,
-        marginVertical: 80,
+        padding: 30,
+        marginVertical: 60,
       },
       titleText: {
         fontSize: 32,
@@ -177,21 +222,31 @@ const FeaturesSection = () => {
         letterSpacing: 8,
       },
       card: {
-        minWidth: 320,
+        minWidth: 260,
+        maxWidth: 300,
         margin: 0,
+        minHeight: 420,
+        alignItems: 'flex-start',
       },
       iconSize: {
-        height: 140,
+        height: 100,
       },
       cardTitle: {
-        fontSize: 26,
+        fontSize: 24,
       },
       cardDescription: {
-        fontSize: 15,
-        lineHeight: 26,
+        fontSize: 14,
+        lineHeight: 24,
+        position: 'absolute',
+        top: 140,
+        left: 35,
+        right: 35,
+        textAlign: 'left',
       },
       textContainer: {
-        padding: 35,
+        padding: 24,
+        alignItems: 'flex-start',
+        position: 'relative',
       }
     };
   };
@@ -202,32 +257,32 @@ const FeaturesSection = () => {
     <View style={[styles.container, responsiveStyles.container]}>
       <View style={styles.titleContainer}>
         <Text style={[styles.sectionTitle, { fontSize: responsiveStyles.titleText.fontSize, letterSpacing: responsiveStyles.titleText.letterSpacing, marginBottom: responsiveStyles.titleText.marginBottom }]}>
-          Simplify daily tasks,
+          Eve's promise
         </Text>
         <Text style={[styles.sectionTitleHighlight, { fontSize: responsiveStyles.highlightText.fontSize, letterSpacing: responsiveStyles.highlightText.letterSpacing }]}>
-          amplify results
+          Our core pillars
         </Text>
       </View>
       <View style={[styles.featuresGrid, { flexDirection: width <= 768 ? 'column' : 'row' }]}>
         <FeatureCard
           index={0}
-          title="Hyper Personalized"
-          description="Combining long and short term memory to build a PA that truly understands your needs."
-          icon={<NetworkIcon />}
+          title="Privacy First"
+          description="Enterprise grade security. Eve will never share your data or violate any GDPR law."
+          icon={<SecurityIcon />}
           responsiveStyles={responsiveStyles}
         />
         <FeatureCard
           index={1}
-          title="Made for Web3"
+          title="Web3 native"
           description="Eve's built on the intersection of Web3, Crypto, Finance and VC."
-          icon={<Web3Icon />}
+          icon={<NetworkIcon />}
           responsiveStyles={responsiveStyles}
         />
         <FeatureCard
           index={2}
-          title="Security First"
-          description="Enterprise grade security. Eve will never share your data or violate any GDPR law."
-          icon={<SecurityIcon />}
+          title="Personalized"
+          description="Combining long and short term memory to build a PA that truly understands your needs."
+          icon={<Web3Icon />}
           responsiveStyles={responsiveStyles}
         />
       </View>
@@ -238,7 +293,7 @@ const FeaturesSection = () => {
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    maxWidth: 1200,
+    maxWidth: 1000,
     alignSelf: 'center',
     position: 'relative',
     zIndex: 1,
@@ -253,7 +308,7 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontFamily: 'Orbitron_400Regular',
     textAlign: 'center',
-    textTransform: 'uppercase',
+    textTransform: 'normal',
     letterSpacing: 6,
     marginBottom: 15,
     opacity: 0.7,
@@ -263,22 +318,24 @@ const styles = StyleSheet.create({
     fontSize: 56,
     fontFamily: 'Orbitron_700Bold',
     textAlign: 'center',
-    textTransform: 'uppercase',
+    textTransform: 'normal',
     letterSpacing: 8,
     textShadow: '0 0 30px rgba(244, 228, 9, 0.2)',
   },
   featuresGrid: {
     flexDirection: 'row',
-    gap: 30,
+    gap: 20,
     justifyContent: 'center',
+    alignItems: 'center',
     flexWrap: 'wrap',
     perspective: 1000,
+    padding: '0 10px',
   },
   featureCard: {
     flex: 1,
-    minWidth: 320,
-    maxWidth: 380,
-    minHeight: 500,
+    minWidth: 260,
+    maxWidth: 300,
+    minHeight: 420,
     backgroundColor: 'rgba(0, 0, 0, 0.4)',
     borderRadius: 20,
     overflow: 'hidden',
@@ -308,7 +365,7 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   cardContent: {
-    padding: 10,
+    padding: 8,
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
@@ -316,19 +373,19 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
   iconContainer: {
-    height: 140,
+    height: 100,
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
-    margin: 28,
-    marginTop: 36,
+    margin: 20,
+    marginTop: 24,
     flexShrink: 0,
   },
   textContainer: {
     position: 'relative',
     flex: 1,
-    padding: 35,
-    height: 280,
+    padding: 24,
+    height: 240,
     display: 'flex',
     flexDirection: 'column',
   },
@@ -357,10 +414,6 @@ const styles = StyleSheet.create({
     lineHeight: 26,
     fontFamily: 'monospace',
     letterSpacing: 0.7,
-    position: 'absolute',
-    top: 120,
-    left: 35,
-    right: 35,
   },
   icon: {
     width: 80,
