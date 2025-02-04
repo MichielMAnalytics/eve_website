@@ -298,9 +298,6 @@ const Home = () => {
                       <View style={dynamicStyles.placeholderLogoWrapper}>
                         <View style={dynamicStyles.placeholderLogo} />
                       </View>
-                      <View style={dynamicStyles.placeholderLogoWrapper}>
-                        <View style={dynamicStyles.placeholderLogo} />
-                      </View>
                     </View>
                   </Text>
                 </View>
