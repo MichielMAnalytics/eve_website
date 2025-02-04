@@ -142,7 +142,7 @@ const FeaturesSection = () => {
           height: 60,
         },
         cardTitle: {
-          fontSize: 18,
+          fontSize: 24,
           textAlign: 'center',
           marginBottom: 10,
           height: 50,
@@ -151,8 +151,8 @@ const FeaturesSection = () => {
           justifyContent: 'center',
         },
         cardDescription: {
-          fontSize: 13,
-          lineHeight: 18,
+          fontSize: 18,
+          lineHeight: 22,
           textAlign: 'center',
           position: 'relative',
           paddingHorizontal: 20,

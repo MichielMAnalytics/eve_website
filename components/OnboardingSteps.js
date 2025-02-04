@@ -33,11 +33,11 @@ const OnboardingSteps = () => {
           paddingHorizontal: 15,
         },
         title: {
-          fontSize: 28,
+          fontSize: 32,
           marginBottom: 12,
         },
         subtitle: {
-          fontSize: 14,
+          fontSize: 18,
           lineHeight: 20,
           paddingHorizontal: 20,
         },
@@ -48,7 +48,7 @@ const OnboardingSteps = () => {
         },
         stepColumn: {
           flexDirection: 'row',
-          alignItems: 'center',
+          alignItems: 'top',
           gap: 20,
           paddingHorizontal: 10,
           marginBottom: 25,
@@ -61,18 +61,18 @@ const OnboardingSteps = () => {
         },
         textGroup: {
           flex: 1,
-          justifyContent: 'center',
+          justifyContent: 'top',
           minHeight: 60,
         },
         stepTitle: {
-          fontSize: 18,
+          fontSize: 24,
           marginBottom: 4,
           textAlign: 'left',
           color: '#F4E409',
         },
         stepDescription: {
-          fontSize: 13,
-          lineHeight: 18,
+          fontSize: 18,
+          lineHeight: 22,
           textAlign: 'left',
           opacity: 0.7,
           paddingRight: 10,
@@ -164,9 +164,8 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     paddingVertical: 80,
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
+    borderTopWidth: 0,
+    borderBottomWidth: 0,
     borderColor: 'rgba(244, 228, 9, 0.1)',
   },
   content: {
