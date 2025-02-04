@@ -40,7 +40,7 @@ const debounce = (func, wait) => {
 
 const getDynamicStyles = (width) => ({
   mainTitle: {
-    fontSize: width <= 480 ? 40 : width <= 768 ? 48 : 64,
+    fontSize: width <= 480 ? 50 : width <= 768 ? 48 : 64,
     lineHeight: width <= 480 ? '50px' : width <= 768 ? '52px' : '68px',
     width: 'auto',
     whiteSpace: 'wrap',
@@ -65,8 +65,8 @@ const getDynamicStyles = (width) => ({
   descriptionText: {
     textAlign: 'left',
     maxWidth: width <= 1024 ? '600px' : '100%',
-    fontSize: width <= 480 ? 14 : width <= 768 ? 16 : 20,
-    lineHeight: width <= 480 ? 20 : width <= 768 ? 24 : 32,
+    fontSize: width <= 480 ? 18 : width <= 768 ? 16 : 20,
+    lineHeight: width <= 480 ? 22 : width <= 768 ? 24 : 32,
     marginTop: width <= 768 ? 12 : 24,
     opacity: 0.8,
   },

@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.js": "/static/js/main.ccaf770c.js",
+    "main.js": "/static/js/main.0f7edd1b.js",
     "static/js/529.08c0384d.js": "/static/js/529.08c0384d.js",
     "static/media/Orbitron_500Medium.ttf": "/static/media/Orbitron_500Medium.9a70c40dbb1533188a39.ttf",
     "static/media/Orbitron_600SemiBold.ttf": "/static/media/Orbitron_600SemiBold.c34599970b617b8b3d23.ttf",
@@ -14,11 +14,11 @@
     "favicon-16.png": "/favicon-16.png",
     "manifest.json": "/manifest.json",
     "serve.json": "/serve.json",
-    "main.ccaf770c.js.map": "/static/js/main.ccaf770c.js.map",
+    "main.0f7edd1b.js.map": "/static/js/main.0f7edd1b.js.map",
     "529.08c0384d.js.map": "/static/js/529.08c0384d.js.map"
   },
   "entrypoints": [
     "static/js/529.08c0384d.js",
-    "static/js/main.ccaf770c.js"
+    "static/js/main.0f7edd1b.js"
   ]
 }
