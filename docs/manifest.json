@@ -2,8 +2,8 @@
   "background_color": "#ffffff",
   "display": "standalone",
   "lang": "en",
-  "name": "Eve Protocol",
-  "short_name": "Eve Protocol",
+  "name": "E.V.E. Protocol",
+  "short_name": "E.V.E. Protocol",
   "start_url": "/?utm_source=web_app_manifest",
   "orientation": "portrait"
 }
