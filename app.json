@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Eve Protocol",
+    "name": "E.V.E. Protocol",
     "slug": "eve-protocol",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -23,8 +23,9 @@
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png",
+      "favicon": "./public/favicon.png",
       "bundler": "webpack"
     }
+
   }
 }
