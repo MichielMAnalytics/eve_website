@@ -77,7 +77,7 @@ const Footer = ({ dynamicStyles }) => {
         <View style={[styles.footerRow, responsiveStyles.footerRow]}>
           <View style={[styles.sideSection, styles.leftSection, responsiveStyles.sideSection]}>
             <Text style={[styles.copyrightText, responsiveStyles.copyrightText]}>
-              © 2025 Eveprotocol
+              © 2025 E.V.E. protocol
             </Text>
           </View>
           
