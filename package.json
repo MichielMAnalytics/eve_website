@@ -8,7 +8,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "build": "npx expo export:web",
-    "build-docs": "rimraf docs && npm run build && move web-build docs && echo eve-protocol.ai > docs/CNAME"
+    "build-docs": "rimraf docs && npm run build && mv web-build docs && echo eve-protocol.ai > docs/CNAME"
   },
   "dependencies": {
     "@expo-google-fonts/orbitron": "^0.2.3",
