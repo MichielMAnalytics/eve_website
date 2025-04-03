@@ -26,6 +26,10 @@ const Navbar = () => {
     return null;
   }
 
+  const handleWaitlistClick = () => {
+    window.open('https://t.me/EVEAGENT_bot', '_blank');
+  };
+
   const dynamicStyles = {
     navbar: {
       padding: width <= 768 ? 15 : 20,
@@ -53,6 +57,14 @@ const Navbar = () => {
     },
     connectButtonText: {
       fontSize: width <= 768 ? 12 : 14,
+    },
+    waitlistButton: {
+      paddingHorizontal: width <= 768 ? 12 : 18,
+      paddingVertical: width <= 768 ? 8 : 10,
+      marginLeft: width <= 768 ? 15 : 20,
+    },
+    waitlistButtonText: {
+      fontSize: width <= 768 ? 11 : 13,
     },
   };
 
@@ -131,16 +143,33 @@ const Navbar = () => {
 
   return (
     <View style={[styles.navbar, dynamicStyles.navbar]}>
-      <Link to="/" style={{ textDecoration: 'none' }}>
-        <View style={styles.logoContainer}>
-          <Text style={[styles.logo, dynamicStyles.logo]}>
-            <Text style={styles.logoE}>E</Text>
-            <Text style={styles.logoVE}>VE</Text>
-            <Text style={[styles.logoVersion, dynamicStyles.logoVersion]}>v1</Text>
+      <View style={styles.leftSection}>
+        <Link to="/" style={{ textDecoration: 'none' }}>
+          <View style={styles.logoContainer}>
+            <Text style={[styles.logo, dynamicStyles.logo]}>
+              <Text style={styles.logoE}>E</Text>
+              <Text style={styles.logoVE}>VE</Text>
+              <Text style={[styles.logoVersion, dynamicStyles.logoVersion]}>v1</Text>
+            </Text>
+            <View style={styles.logoUnderline} />
+          </View>
+        </Link>
+        
+        <Pressable 
+          style={[styles.waitlistButton, dynamicStyles.waitlistButton]}
+          onPress={handleWaitlistClick}
+        >
+          <LinearGradient
+            colors={['rgba(244, 228, 9, 0.2)', 'rgba(244, 228, 9, 0.1)']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.waitlistGradient}
+          />
+          <Text style={[styles.waitlistButtonText, dynamicStyles.waitlistButtonText]}>
+            JOIN WAITLIST
           </Text>
-          <View style={styles.logoUnderline} />
-        </View>
-      </Link>
+        </Pressable>
+      </View>
       
       {isSmallScreen ? (
         <>
@@ -437,6 +466,34 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  leftSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  waitlistButton: {
+    borderWidth: 1,
+    borderColor: '#F4E409',
+    borderRadius: 4,
+    paddingHorizontal: 18,
+    paddingVertical: 10,
+    marginLeft: 20,
+    position: 'relative',
+    overflow: 'hidden',
+  },
+  waitlistGradient: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  waitlistButtonText: {
+    color: '#F4E409',
+    fontFamily: 'Orbitron_400Regular',
+    fontSize: 13,
+    letterSpacing: 1,
+    textShadow: '0 0 5px rgba(244, 228, 9, 0.5)',
   },
 });
 
