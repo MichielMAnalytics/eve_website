@@ -25,6 +25,7 @@ import Footer from './components/Footer';
 import FeaturesSection from './components/FeaturesSection';
 import UserStatistics from './components/UserStatistics';
 import OnboardingSteps from './components/OnboardingSteps';
+import WorldGlobe from './components/WorldGlobe';
 
 const debounce = (func, wait) => {
   let timeout;
@@ -151,6 +152,7 @@ const getDynamicStyles = (width) => ({
 const Home = () => {
   const { width, height } = useWindowDimensions();
   const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const globeRef = useRef(null);
 
   let [fontsLoaded] = useFonts({
     Orbitron_400Regular,
@@ -181,6 +183,14 @@ const Home = () => {
       useNativeDriver: true,
     }).start();
   }, [width, height, octahedronX, octahedronY]);
+
+  // Handle octahedron click
+  const handleOctahedronClick = useCallback(() => {
+    // Trigger the globe spin when octahedron is clicked
+    if (globeRef.current) {
+      globeRef.current.spinOneRotation();
+    }
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -260,87 +270,31 @@ const Home = () => {
 
       {/* Simplified Octahedron layer */}
       {showOctahedron && (
-        <Animated.View
+        <Animated.View 
           style={[
-            styles.octahedron,
+            styles.octahedronContainer,
             {
               transform: [
                 { translateX: octahedronX },
                 { translateY: octahedronY },
+                { translateY: -200 }, 
+                { rotate: '-15deg' },
               ],
             },
           ]}
         >
-          <OctahedronSvg width={400} height={400} />
+          <OctahedronSvg 
+            width={400} 
+            height={400} 
+            onClick={handleOctahedronClick}
+          />
         </Animated.View>
       )}
 
       {/* Content layer */}
       <SafeAreaView style={styles.content}>
         <Navbar />
-
-        <View style={[styles.heroSection, dynamicStyles.heroSection]}>
-          <View style={dynamicStyles.contentContainer}>
-            <View style={[styles.heroContent, dynamicStyles.heroContent]}>
-              {/* Left Column */}
-              <View style={[styles.heroColumn, styles.leftColumn, dynamicStyles.heroColumn]}>
-                <Text style={[styles.systemText, dynamicStyles.systemText]}>
-                  // Trusted by the best in Web3.0
-                </Text>
-                <View style={[styles.mainTitleWrapper, dynamicStyles.mainTitleWrapper]}>
-                  <Text style={[styles.mainTitle, dynamicStyles.mainTitle]}>
-                    Spend less time on{' '}
-                    <View style={[styles.titleLogoWrapper, dynamicStyles.titleLogoWrapper]}>
-                      <Image 
-                        source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Telegram_2019_Logo.svg/512px-Telegram_2019_Logo.svg.png' }}
-                        style={dynamicStyles.titleLogo}
-                      />
-                      <View style={dynamicStyles.placeholderLogoWrapper}>
-                        <View style={dynamicStyles.placeholderLogo} />
-                      </View>
-                    </View>
-                  </Text>
-                </View>
-                <Text style={[styles.descriptionText, dynamicStyles.descriptionText]}>
-                    Stop reacting. Start creating. Let your digital twin filter through the noise.
-                </Text>
-                
-                {/* Update the CTA button to use the scroll handler */}
-                <Pressable 
-                  style={styles.ctaButton}
-                  onPress={scrollToOnboarding}
-                >
-                  <LinearGradient
-                    colors={['#F4E409', '#E5D104']}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 0 }}
-                    style={styles.ctaGradient}
-                  >
-                    <Text style={styles.ctaText}>Get Started</Text>
-                  </LinearGradient>
-                </Pressable>
-
-                {/* <View style={styles.actionContainer}>
-                  <Text style={[styles.versionText, dynamicStyles.versionText]}>
-                    V.1.0.0 | Powered by the E.V.E. Protocol
-                  </Text>
-                </View> */}
-              </View>
-
-              {/* Right Column */}
-              <View style={[styles.heroColumn, styles.rightColumn, dynamicStyles.heroColumn]}>
-                <UserStatistics />
-              </View>
-            </View>
-          </View>
-        </View>
-
-        {/* Add ref to OnboardingSteps */}
-        <View ref={onboardingRef}>
-          <OnboardingSteps />
-        </View>
-
-        <FeaturesSection />
+        <WorldGlobe ref={globeRef} />
         <Footer />
       </SafeAreaView>
 
@@ -407,17 +361,22 @@ const styles = StyleSheet.create({
     zIndex: 2,
     pointerEvents: 'none',
   },
-  octahedron: {
+  octahedronContainer: {
     position: 'fixed',
-    top: '15vh',
-    left: '90vh',
-    transform: [{ translateY: -200 }, { rotate: '-15deg' }],
-    zIndex: 3,
-    pointerEvents: 'none',
+    top: 0,
+    left: 0,
+    zIndex: 10,
+    pointerEvents: 'auto',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     opacity: 0.7,
+    width: 400,
+    height: 400,
+  },
+  octahedron: {
+    width: 400,
+    height: 400,
   },
   content: {
     flex: 1,
@@ -426,6 +385,9 @@ const styles = StyleSheet.create({
     zIndex: 3,
     paddingBottom: 0,
     marginBottom: 0,
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: '100vh',
   },
   heroSection: {
     flex: 1,
@@ -536,10 +498,9 @@ const styles = StyleSheet.create({
   },
   footer: {
     position: 'relative',
-    height: 'auto',
-    minHeight: 180,
     width: '100%',
-    overflow: 'hidden',
+    marginTop: 'auto',
+    zIndex: 5,
   },
   footerGradient: {
     position: 'absolute',

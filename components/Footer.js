@@ -6,61 +6,67 @@ const Footer = ({ dynamicStyles }) => {
   const { width } = useWindowDimensions();
   const isSmallScreen = width <= 900;
   const isMobileScreen = width <= 600;
+  const isVerySmallScreen = width <= 480;
   const iconSize = width <= 900 ? 20 : 24;
 
   const responsiveStyles = {
     footerContent: {
       paddingHorizontal: isMobileScreen ? 15 : isSmallScreen ? 20 : 40,
-      paddingVertical: isMobileScreen ? 15 : isSmallScreen ? 18 : 20,
+      paddingVertical: isMobileScreen ? 12 : isSmallScreen ? 15 : 20,
       maxWidth: 1280,
       marginHorizontal: 'auto',
     },
     footerRow: {
-      flexDirection: isSmallScreen ? 'column' : 'row',
+      flexDirection: 'row',
       alignItems: 'center',
-      gap: isSmallScreen ? 25 : 0,
+      gap: 10,
       width: '100%',
       justifyContent: 'space-between',
     },
     policyLinksContainer: {
       flexDirection: 'row',
-      gap: isMobileScreen ? 15 : 10,
+      gap: isMobileScreen ? 5 : 10,
       alignItems: 'center',
       justifyContent: 'center',
-      flex: isSmallScreen ? 0 : 2,
-      marginVertical: isSmallScreen ? 15 : 0,
-      width: isSmallScreen ? '100%' : 'auto',
-      flexWrap: 'wrap',
+      flex: isSmallScreen ? 1 : 2,
+      width: 'auto',
+      flexWrap: 'nowrap',
+      marginLeft: isVerySmallScreen ? 15 : isMobileScreen ? 20 : 0,
     },
     policyLinkText: {
-      fontSize: isMobileScreen ? 11 : 12,
+      fontSize: isVerySmallScreen ? 9 : isMobileScreen ? 10 : 12,
       textAlign: 'center',
       color: '#666',
     },
     policyDivider: {
-      display: isMobileScreen ? 'none' : 'flex',
-      marginHorizontal: isSmallScreen ? 8 : 10,
+      display: 'flex',
+      marginHorizontal: isVerySmallScreen ? 2 : isMobileScreen ? 4 : 10,
+      fontSize: isVerySmallScreen ? 10 : isMobileScreen ? 12 : 14,
     },
     sideSection: {
       flex: isSmallScreen ? 0 : 1,
-      width: isSmallScreen ? '100%' : 'auto',
-      marginBottom: isSmallScreen ? 10 : 0,
+      maxWidth: isVerySmallScreen ? '25%' : isSmallScreen ? 'auto' : '30%',
     },
     socialLink: {
-      padding: isMobileScreen ? 10 : 8,
+      padding: isVerySmallScreen ? 6 : isMobileScreen ? 8 : 8,
       backgroundColor: 'rgba(244, 228, 9, 0.1)',
       borderRadius: 5,
-      alignSelf: isSmallScreen ? 'center' : 'flex-end',
+      alignSelf: 'flex-end',
     },
     copyrightText: {
-      fontSize: isMobileScreen ? 10 : 11,
-      textAlign: isSmallScreen ? 'center' : 'left',
+      fontSize: isVerySmallScreen ? 8 : isMobileScreen ? 9 : 11,
+      textAlign: 'left',
       color: '#666',
+      whiteSpace: 'nowrap',
     },
     leftSection: {
-      alignItems: isSmallScreen ? 'center' : 'flex-start',
+      alignItems: 'flex-start',
       justifyContent: 'center',
     },
+    policyLink: {
+      padding: isVerySmallScreen ? 4 : 6,
+      minWidth: isVerySmallScreen ? 'auto' : isMobileScreen ? 70 : 80,
+    }
   };
 
   const handlePolicyClick = (url) => {
@@ -77,41 +83,41 @@ const Footer = ({ dynamicStyles }) => {
         <View style={[styles.footerRow, responsiveStyles.footerRow]}>
           <View style={[styles.sideSection, styles.leftSection, responsiveStyles.sideSection]}>
             <Text style={[styles.copyrightText, responsiveStyles.copyrightText]}>
-              © 2025 E.V.E. protocol
+              © 2025 E.V.E.
             </Text>
           </View>
           
           <View style={[styles.policyLinksContainer, responsiveStyles.policyLinksContainer]}>
             <Pressable 
-              style={styles.policyLink}
+              style={[styles.policyLink, responsiveStyles.policyLink]}
               onPress={() => handlePolicyClick('https://app.termly.io/policy-viewer/policy.html?policyUUID=8e73b71f-0dff-46c4-a312-a7a418937749')}
             >
               <Text style={[styles.policyLinkText, responsiveStyles.policyLinkText]}>Privacy Policy</Text>
             </Pressable>
             <Text style={[styles.policyDivider, responsiveStyles.policyDivider]}>|</Text>
             <Pressable 
-              style={styles.policyLink}
+              style={[styles.policyLink, responsiveStyles.policyLink]}
               onPress={() => handlePolicyClick('https://app.termly.io/policy-viewer/policy.html?policyUUID=2512b9fa-1f74-489a-be43-d5336e089119')}
             >
-              <Text style={[styles.policyLinkText, responsiveStyles.policyLinkText]}>Terms & Conditions</Text>
+              <Text style={[styles.policyLinkText, responsiveStyles.policyLinkText]}>Terms</Text>
             </Pressable>
             <Text style={[styles.policyDivider, responsiveStyles.policyDivider]}>|</Text>
             <Pressable 
-              style={styles.policyLink}
+              style={[styles.policyLink, responsiveStyles.policyLink]}
               onPress={() => handlePolicyClick('https://app.termly.io/policy-viewer/policy.html?policyUUID=7fe0551c-b80a-4508-a25d-3b92faa89653')}
             >
-              <Text style={[styles.policyLinkText, responsiveStyles.policyLinkText]}>Cookie Policy</Text>
+              <Text style={[styles.policyLinkText, responsiveStyles.policyLinkText]}>Cookies</Text>
             </Pressable>
           </View>
 
           <View style={[styles.sideSection, styles.rightSection, responsiveStyles.sideSection]}>
             <Pressable 
-              style={styles.socialLink} 
+              style={[styles.socialLink, responsiveStyles.socialLink]} 
               onPress={() => window.open('https://x.com/eveprotocolai', '_blank')}
             >
               <svg 
-                width={iconSize} 
-                height={iconSize} 
+                width={isVerySmallScreen ? 16 : iconSize} 
+                height={isVerySmallScreen ? 16 : iconSize} 
                 viewBox="0 0 24 24" 
                 fill="#F4E409"
               >
@@ -129,7 +135,7 @@ const styles = StyleSheet.create({
   footer: {
     position: 'relative',
     height: 'auto',
-    minHeight: 60,
+    minHeight: 50,
     width: '100%',
     overflow: 'hidden',
   },
