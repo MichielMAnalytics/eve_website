@@ -15,6 +15,8 @@ const Footer = ({ dynamicStyles }) => {
       paddingVertical: isMobileScreen ? 12 : isSmallScreen ? 15 : 20,
       maxWidth: 1280,
       marginHorizontal: 'auto',
+      position: 'relative',
+      zIndex: 10,
     },
     footerRow: {
       flexDirection: 'row',
@@ -138,6 +140,10 @@ const styles = StyleSheet.create({
     minHeight: 50,
     width: '100%',
     overflow: 'hidden',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 10,
   },
   footerGradient: {
     position: 'absolute',
@@ -155,7 +161,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: 'rgba(244, 228, 9, 0.1)',
     backgroundColor: 'rgba(0, 0, 0, 0.95)',
-    zIndex: 1,
+    zIndex: 10,
   },
   footerRow: {
     width: '100%',
